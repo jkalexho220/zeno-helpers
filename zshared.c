@@ -136,7 +136,7 @@ int malloc(int type = -1) {
 	return(next);
 }
 
-bool mGetBool(int index = 0) {
+bool zGetBool(int index = 0) {
 	bool val = false;
 	if (aiPlanGetUserVariableBool(MALLOC, mBool * 3 + xDirtyBit - 1, index)) {
 		val = aiPlanGetUserVariableBool(MALLOC, mBool * 3 + xData - 1, index);
@@ -144,7 +144,7 @@ bool mGetBool(int index = 0) {
 	return(val);
 }
 
-bool mSetBool(int index = 0, bool val = false) {
+bool zSetBool(int index = 0, bool val = false) {
 	bool success = false;
 	if (aiPlanGetUserVariableBool(MALLOC, mBool * 3 + xDirtyBit - 1, index)) {
 		success = aiPlanSetUserVariableBool(MALLOC, mBool * 3 + xData - 1, index, val);
@@ -152,18 +152,18 @@ bool mSetBool(int index = 0, bool val = false) {
 	return(success);
 }
 
-int mNewBool(bool val = false) {
+int zNewBool(bool val = false) {
 	int index = malloc(mBool);
-	mSetBool(index, val);
+	zSetBool(index, val);
 	return(index);
 }
 
-bool mFreeBool(int index = 0) {
+bool zFreeBool(int index = 0) {
 	return(free(mBool, index));
 }
 
 
-string mGetString(int index = 0) {
+string zGetString(int index = 0) {
 	string val = "";
 	if (aiPlanGetUserVariableBool(MALLOC, mString * 3 + xDirtyBit - 1, index)) {
 		val = aiPlanGetUserVariableString(MALLOC, mString * 3 + xData - 1, index);
@@ -171,7 +171,7 @@ string mGetString(int index = 0) {
 	return(val);
 }
 
-bool mSetString(int index = 0, string val = "") {
+bool zSetString(int index = 0, string val = "") {
 	bool success = false;
 	if (aiPlanGetUserVariableBool(MALLOC, mString * 3 + xDirtyBit - 1, index)) {
 		success = aiPlanSetUserVariableString(MALLOC, mString * 3 + xData - 1, index, val);
@@ -179,17 +179,17 @@ bool mSetString(int index = 0, string val = "") {
 	return(success);
 }
 
-int mNewString(string val = "") {
+int zNewString(string val = "") {
 	int index = malloc(mString);
-	mSetString(index, val);
+	zSetString(index, val);
 	return(index);
 }
 
-bool mFreeString(int index = 0) {
+bool zFreeString(int index = 0) {
 	return(free(mString, index));
 }
 
-int mGetInt(int index = 0) {
+int zGetInt(int index = 0) {
 	int val = -1;
 	if (aiPlanGetUserVariableBool(MALLOC, mInt * 3 + xDirtyBit - 1, index)) {
 		val = aiPlanGetUserVariableInt(MALLOC, mInt * 3 + xData - 1, index);
@@ -197,7 +197,7 @@ int mGetInt(int index = 0) {
 	return(val);
 }
 
-bool mSetInt(int index = 0, int val = 0) {
+bool zSetInt(int index = 0, int val = 0) {
 	bool success = false;
 	if (aiPlanGetUserVariableBool(MALLOC, mInt * 3 + xDirtyBit - 1, index)) {
 		success = aiPlanSetUserVariableInt(MALLOC, mInt * 3 + xData - 1, index, val);
@@ -205,17 +205,17 @@ bool mSetInt(int index = 0, int val = 0) {
 	return(success);
 }
 
-int mNewInt(int val = 0) {
+int zNewInt(int val = 0) {
 	int index = malloc(mInt);
-	mSetInt(index, val);
+	zSetInt(index, val);
 	return(index);
 }
 
-bool mFreeInt(int index = 0) {
+bool zFreeInt(int index = 0) {
 	return(free(mInt, index));
 }
 
-float mGetFloat(int index = 0) {
+float zGetFloat(int index = 0) {
 	float val = -1;
 	if (aiPlanGetUserVariableBool(MALLOC, mFloat * 3 + xDirtyBit - 1, index)) {
 		val = aiPlanGetUserVariableFloat(MALLOC, mFloat * 3 + xData - 1, index);
@@ -223,7 +223,7 @@ float mGetFloat(int index = 0) {
 	return(val);
 }
 
-bool mSetFloat(int index = 0, float val = 0) {
+bool zSetFloat(int index = 0, float val = 0) {
 	bool success = false;
 	if (aiPlanGetUserVariableBool(MALLOC, mFloat * 3 + xDirtyBit - 1, index)) {
 		success = aiPlanSetUserVariableFloat(MALLOC, mFloat * 3 + xData - 1, index, val);
@@ -231,17 +231,17 @@ bool mSetFloat(int index = 0, float val = 0) {
 	return(success);
 }
 
-int mNewFloat(float val = 0) {
+int zNewFloat(float val = 0) {
 	int index = malloc(mFloat);
-	mSetFloat(index, val);
+	zSetFloat(index, val);
 	return(index);
 }
 
-bool mFreeFloat(int index = 0) {
+bool zFreeFloat(int index = 0) {
 	return(free(mFloat, index));
 }
 
-vector mGetVector(int index = 0) {
+vector zGetVector(int index = 0) {
 	vector val = vector(-1,-1,-1);
 	if (aiPlanGetUserVariableBool(MALLOC, mVector * 3 + xDirtyBit - 1, index)) {
 		val = aiPlanGetUserVariableVector(MALLOC, mVector * 3 + xData - 1, index);
@@ -249,7 +249,7 @@ vector mGetVector(int index = 0) {
 	return(val);
 }
 
-bool mSetVector(int index = 0, vector val = vector(0,0,0)) {
+bool zSetVector(int index = 0, vector val = vector(0,0,0)) {
 	bool success = false;
 	if (aiPlanGetUserVariableBool(MALLOC, mVector * 3 + xDirtyBit - 1, index)) {
 		success = aiPlanSetUserVariableVector(MALLOC, mVector * 3 + xData - 1, index, val);
@@ -257,13 +257,13 @@ bool mSetVector(int index = 0, vector val = vector(0,0,0)) {
 	return(success);
 }
 
-int mNewVector(vector val = vector(0,0,0)) {
+int zNewVector(vector val = vector(0,0,0)) {
 	int index = malloc(mVector);
-	mSetVector(index, val);
+	zSetVector(index, val);
 	return(index);
 }
 
-bool mFreeVector(int index = 0) {
+bool zFreeVector(int index = 0) {
 	return(free(mVector, index));
 }
 
@@ -916,14 +916,14 @@ highFrequency
 void trVectorQuestVarSet(string name = "", vector QVv = vector(-1,-1,-1)) {
 	if (name == "") return;
 	if (trQuestVarGet("vector"+name) == 0) {
-		trQuestVarSet("vector"+name, mNewVector(QVv));
+		trQuestVarSet("vector"+name, zNewVector(QVv));
 	} else {
-		mSetVector(1*trQuestVarGet("vector"+name),QVv);
+		zSetVector(1*trQuestVarGet("vector"+name),QVv);
 	}
 }
 
 vector trVectorQuestVarGet(string name = "") {
-	return(mGetVector(1*trQuestVarGet("vector"+name)));
+	return(zGetVector(1*trQuestVarGet("vector"+name)));
 }
 
 float trVectorQuestVarGetX(string name = "") {
@@ -939,21 +939,21 @@ float trVectorQuestVarGetZ(string name = "") {
 }
 
 void trVectorQuestVarEcho(string name = "") {
-	if (VQVname == "") return;
+	if (name == "") return;
 	trChatSend(0, ""+name+": "+trVectorQuestVarGet(name));
 }
 
 
 void trStringQuestVarSet(string name = "", string value = "") {
 	if (trQuestVarGet("string"+name) > 0) {
-		mSetString(1*trQuestVarGet("string"+name), value);
+		zSetString(1*trQuestVarGet("string"+name), value);
 	} else {
-		trQuestVarSet("string"+name, mNewString(value));
+		trQuestVarSet("string"+name, zNewString(value));
 	}
 }
 
 string trStringQuestVarGet(string name="") {
-	string val = mGetString(1*trQuestVarGet("string"+name));
+	string val = zGetString(1*trQuestVarGet("string"+name));
 	return(val);
 }
 
@@ -1089,9 +1089,9 @@ bool vectorInRectangle(vector pos = vector(0,0,0), vector bot = vector(0,0,0), v
 }
 
 bool trVectorInRectangle(string pos = "", string bot = "", string top = "") {
-	vector tempPos = mGetVector(1*trQuestVarGet(pos));
-	vector tempBot = mGetVector(1*trQuestVarGet(bot));
-	vector tempTop = mGetVector(1*trQuestVarGet(top));
+	vector tempPos = zGetVector(1*trQuestVarGet(pos));
+	vector tempBot = zGetVector(1*trQuestVarGet(bot));
+	vector tempTop = zGetVector(1*trQuestVarGet(top));
 	return(vectorInRectangle(tempPos,tempBot,tempTop));
 }
 
@@ -1257,10 +1257,13 @@ int peekModularCounterNext(string name = "") {
 	return(0 + trQuestVarGet("counter" + name + "fake"));
 }
 
-bool yDatabaseCreateIfNull(string dbname = "") {
+bool yDatabaseCreateIfNull(string dbname = "", int count = 0) {
 	bool created = false;
 	if (trQuestVarGet("database"+dbname) == 0) {
-		trQuestVarSet("database"+dbname, xInitDatabase(dbname));
+		if (count < 0) {
+			count = 0;
+		}
+		trQuestVarSet("database"+dbname, xInitDatabase(dbname, count));
 		created = true;
 	}
 	return(created);
@@ -1274,7 +1277,7 @@ bool yVariableExists(string dbname = "", string varname = "") {
 
 float yGetVarAtIndex(string db = "", string var = "", int index = 0) {
 	if (yVariableExists(db, var)) {
-		return(xGetFloat(1*trQuestVarGet("database"+db),trQuestVarGet("database"+db+var),index));
+		return(xGetFloat(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),index));
 	} else {
 		return(0);
 	}
@@ -1286,7 +1289,7 @@ float yGetVar(string db = "", string var = "") {
 
 string yGetStringAtIndex(string db = "", string var = "", int index = 0) {
 	if (yVariableExists(db, var)) {
-		return(xGetString(1*trQuestVarGet("database"+db),trQuestVarGet("database"+db+var),index));
+		return(xGetString(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),index));
 	} else {
 		return("");
 	}
@@ -1298,9 +1301,9 @@ string yGetString(string db = "", string var = "") {
 
 vector yGetVectorAtIndex(string db = "", string var = "", int index = 0) {
 	if (yVariableExists(db, var)) {
-		return(xGetVector(1*trQuestVarGet("database"+db),trQuestVarGet("database"+db+var),index));
+		return(xGetVector(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),index));
 	} else {
-		return(0);
+		return(vector(0,0,0));
 	}
 }
 
@@ -1312,7 +1315,7 @@ void ySetVarAtIndex(string db = "", string var = "", float val = 0, int index = 
 	if (yVariableExists(db, var)) {
 		xSetFloat(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),val,index);
 	} else {
-		yDatabaseCreateIfNull(db);
+		yDatabaseCreateIfNull(db, index);
 		trQuestVarSet("database"+db+var, xInitAddFloat(1*trQuestVarGet("database"+db),var));
 		xSetFloat(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),val,index);
 	}
@@ -1326,7 +1329,7 @@ void ySetStringAtIndex(string db = "", string var = "", string val = "", int ind
 	if (yVariableExists(db, var)) {
 		xSetString(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),val,index);
 	} else {
-		yDatabaseCreateIfNull(db);
+		yDatabaseCreateIfNull(db, index);
 		trQuestVarSet("database"+db+var, xInitAddFloat(1*trQuestVarGet("database"+db),var));
 		xSetString(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),val,index);
 	}
@@ -1340,7 +1343,7 @@ void ySetVectorAtIndex(string db = "", string var = "", vector val = vector(0,0,
 	if (yVariableExists(db, var)) {
 		xSetVector(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),val,index);
 	} else {
-		yDatabaseCreateIfNull(db);
+		yDatabaseCreateIfNull(db, index);
 		trQuestVarSet("database"+db+var, xInitAddFloat(1*trQuestVarGet("database"+db),var));
 		xSetVector(1*trQuestVarGet("database"+db),1*trQuestVarGet("database"+db+var),val,index);
 	}
@@ -1351,7 +1354,7 @@ void ySetVector(string db = "", string var = "", vector val = vector(0,0,0)) {
 }
 
 int yDatabaseNext(string db = "", bool select = false, bool reverse = false) {
-	xDatabaseNext(1*trQuestVarGet("database"+db));
+	xDatabaseNext(1*trQuestVarGet("database"+db), reverse);
 	int u = yGetVar(db, "unitName");
 	trQuestVarSet(db, u);
 	if (select) {
@@ -1368,7 +1371,7 @@ void yRemoveFromDatabase(string db = "") {
 }
 
 int yGetNewestPointer(string db = "") {
-	return(xGetPointer(1*trQuestVarGet("database"+db)));
+	return(xGetNewestPointer(1*trQuestVarGet("database"+db)));
 }
 
 void yAddUpdateVar(string db = "", string var = "", float val = 0) {
@@ -1396,7 +1399,7 @@ int yGetPointer(string db = "") {
 }
 
 bool ySetPointer(string db = "", int index = 0) {
-	bool safe = xSetPointer(1*trQuestVarGet("database"+db, index));
+	bool safe = xSetPointer(1*trQuestVarGet("database"+db), index);
 	if (safe) {
 		trQuestVarSet(db, yGetVar(db, "unitName"));
 	}
@@ -1419,8 +1422,6 @@ void ySetUnitAtIndex(string db = "", int index = 0, int value = 0) {
 void ySetUnit(string db = "", int value = 0) {
 	ySetVar(db, "unitName", value);
 }
-
-
 
 void yClearDatabase(string db = "") {
 	xClearDatabase(1*trQuestVarGet("database"+db));
@@ -1457,14 +1458,16 @@ unit name.
 int yFindLatest(string qv = "", string proto = "", int p = 0) {
 	int id = kbGetProtoUnitID(proto);
 	trUnitSelectClear();
-	trQuestVarSet("next",trGetNextUnitScenarioNameNumber() - 1);
-	while(trQuestVarGet("next") > trQuestVarGet(qv)) {
-		trQuestVarSet(qv, 1 + trQuestVarGet(qv));
-		int i = kbGetBlockID(""+1*trQuestVarGet(qv), true);
+	int next = trGetNextUnitScenarioNameNumber() - 1;
+	int current = trQuestVarGet(qv);
+	while(next > current) {
+		current = current + 1;
+		int i = kbGetBlockID(""+current, true);
 		if (kbGetUnitBaseTypeID(i) == id) {
 			trUnitSelectClear();
 			trUnitSelectByID(i);
 			if (trUnitIsOwnedBy(p)) {
+				trQuestVarSet(qv, current);
 				return(i);
 			}
 		}

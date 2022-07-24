@@ -1412,7 +1412,7 @@ int yGetDatabaseCount(string db = "") {
 }
 
 int yGetUnitAtIndex(string db = "", int index = 0) {
-	return(yGetVarAtIndex(db, "unitName", index));
+	return(1*yGetVarAtIndex(db, "unitName", index));
 }
 
 void ySetUnitAtIndex(string db = "", int index = 0, int value = 0) {

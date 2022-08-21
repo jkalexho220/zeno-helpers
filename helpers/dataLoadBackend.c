@@ -26,13 +26,7 @@ void recordTotalSize(int slot = 0, int size = 0) {
 	}
 }
 
-/*
-Use this when you want to save the data in a quest var.
-NOTE: This quest var value will be LOCAL to the player, meaning it may have a
-different value for each player.
 
-Usage: addSavedDataQV("cow", 0, 10);
-*/
 void addSavedDataQV(string qvName = "", int slot = 0, int size = 1) {
 	xAddDatabaseBlock(dLocalData, true);
 	xSetInt(dLocalData, xLocalDataSize, size);
@@ -43,17 +37,6 @@ void addSavedDataQV(string qvName = "", int slot = 0, int size = 1) {
 	recordTotalSize(slot, size);
 }
 
-/*
-Use this when you want to save the data in a database containing player info. This data
-will be synced with other players at the start of the map.
-NOTE: The database must be large enough to have an entry for each player. When data is
-loaded, it will be stored at the database <destDB> at the variable <destVar> at the index <p>,
-where p is the player. Also, the database must be declared BEFORE this function is ever
-called. You can do so by declaring the database in a highFrequency trigger that is
-active at the very start.
-
-Usage: addSavedDataDB(dPlayerData, xPlayerHealth, 0, 10);
-*/
 void addSavedDataDB(int destDB = 0, int destVar = 0, int slot = 0, int size = 1) {
 	xAddDatabaseBlock(dLocalData, true);
 	xSetInt(dLocalData, xLocalDataSize, size);
@@ -87,13 +70,10 @@ void saveAllData() {
 		// read the data in the quest var
 		slot = xGetInt(dLocalData, xLocalDataSlot);
 		if (xGetInt(dLocalData, xLocalDataDB) == 0) {
-			debugLog(xGetString(dLocalData, xLocalDataName));
 			currentdata = trQuestVarGet(xGetString(dLocalData, xLocalDataName));
 		} else {
 			currentdata = xGetInt(xGetInt(dLocalData, xLocalDataDB), xGetInt(dLocalData, xLocalDataVar), p);
 		}
-
-		debugLog("currentdata: " + currentdata);
 		
 		// floor and ceiling the data so it fits in the data range
 		currentdata = xsMax(0, currentdata);

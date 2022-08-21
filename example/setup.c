@@ -16,7 +16,7 @@ highFrequency
 		xPrintAll(dPlayerData, xGetPointer(dPlayerData));
 	}
 
-	trQuestVarSet("example", cNumberPlayers);
+	trChatSend(0, "Example: " + trQuestVarGet("example"));
 
 	trQuestVarSet("end", trGetNextUnitScenarioNameNumber());
 	trArmyDispatch("1,0","Pegasus",1,1,0,1,0,true);
@@ -68,6 +68,10 @@ highFrequency
 		saveAllData();
 		trSoundPlayFN("favordump.wav","1",-1,"","");
 		xsDisableSelf();
+	} else if (trUnitIsSelected() && (trTime() > trQuestVarGet("upNext"))) {
+		trQuestVarSet("upNext", trTime());
+		trQuestVarSet("example", 1 + trQuestVarGet("example"));
+		trChatSend(0, "Example: " + trQuestVarGet("example"));
 	}
 }
 

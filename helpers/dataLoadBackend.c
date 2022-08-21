@@ -1,13 +1,17 @@
+int dSavedData = 0;
+int xSavedDataSize = 0;
+int xSavedDataSlot = 0;
+int xSavedDataDB = 0;
+int xSavedDataVar = 0;
+
 int dLocalData = 0;
 int xLocalDataSize = 0;
 int xLocalDataSlot = 0;
 int xLocalDataName = 0;
-int xLocalDataDB = 0;
-int xLocalDataVar = 0;
 
 int loadNumHumans = 0;
 
-int localDataArray = 0; // an array to temporarily store the slot data in memory
+int SavedDataArray = 0; // an array to temporarily store the slot data in memory
 int swordsmanCountArray = 0; // how many swordsmen passes are needed here?
 int playerDataArray = 0;
 
@@ -26,26 +30,23 @@ void recordTotalSize(int slot = 0, int size = 0) {
 	}
 }
 
+void addSavedDataDB(int destDB = 0, int destVar = 0, int slot = 0, int size = 1) {
+	xAddDatabaseBlock(dSavedData, true);
+	xSetInt(dSavedData, xSavedDataSize, size);
+	xSetInt(dSavedData, xSavedDataSlot, slot);
 
-void addSavedDataQV(string qvName = "", int slot = 0, int size = 1) {
+	xSetInt(dSavedData, xSavedDataDB, destDB);
+	xSetInt(dSavedData, xSavedDataVar, destVar);
+
+	recordTotalSize(slot, size);
+}
+
+void addLocalDataQV(string qvName = "", int slot = 0, int size = 1) {
 	xAddDatabaseBlock(dLocalData, true);
 	xSetInt(dLocalData, xLocalDataSize, size);
 	xSetInt(dLocalData, xLocalDataSlot, slot);
 
 	xSetString(dLocalData, xLocalDataName, qvName);
-
-	recordTotalSize(slot, size);
-}
-
-void addSavedDataDB(int destDB = 0, int destVar = 0, int slot = 0, int size = 1) {
-	xAddDatabaseBlock(dLocalData, true);
-	xSetInt(dLocalData, xLocalDataSize, size);
-	xSetInt(dLocalData, xLocalDataSlot, slot);
-
-	xSetInt(dLocalData, xLocalDataDB, destDB);
-	xSetInt(dLocalData, xLocalDataVar, destVar);
-
-	recordTotalSize(slot, size);
 }
 
 void showLoadProgress() {
@@ -61,30 +62,42 @@ void saveAllData() {
 	// save the data
 	for(i=0; < 16) {
 		// make all data 0 in preparation for updates
-		zSetInt(localDataArray, i, 0);
+		zSetInt(SavedDataArray, i, 0);
 	}
 	// read data from the various quest vars in backwards order
+	xSetPointer(dSavedData, 1);
+	for(i=xGetDatabaseCount(dSavedData); >0) {
+		xDatabaseNext(dSavedData, true); // database search is backwards this time
+		// read the data in the quest var
+		slot = xGetInt(dSavedData, xSavedDataSlot);
+		currentdata = xGetInt(xGetInt(dSavedData, xSavedDataDB), xGetInt(dSavedData, xSavedDataVar), p);
+		
+		// floor and ceiling the data so it fits in the data range
+		currentdata = xsMax(0, currentdata);
+		currentdata = xsMin(currentdata, xGetInt(dSavedData, xSavedDataSize) - 1);
+		
+		// shift the slot data over and insert our data
+		zSetInt(SavedDataArray, slot, zGetInt(SavedDataArray, slot) * xGetInt(dSavedData, xSavedDataSize) + currentdata);
+	}
+
+	// Local data
 	xSetPointer(dLocalData, 1);
 	for(i=xGetDatabaseCount(dLocalData); >0) {
 		xDatabaseNext(dLocalData, true); // database search is backwards this time
 		// read the data in the quest var
 		slot = xGetInt(dLocalData, xLocalDataSlot);
-		if (xGetInt(dLocalData, xLocalDataDB) == 0) {
-			currentdata = trQuestVarGet(xGetString(dLocalData, xLocalDataName));
-		} else {
-			currentdata = xGetInt(xGetInt(dLocalData, xLocalDataDB), xGetInt(dLocalData, xLocalDataVar), p);
-		}
+		currentdata = trQuestVarGet(xGetString(dLocalData, xLocalDataName));
 		
 		// floor and ceiling the data so it fits in the data range
 		currentdata = xsMax(0, currentdata);
 		currentdata = xsMin(currentdata, xGetInt(dLocalData, xLocalDataSize) - 1);
 		
 		// shift the slot data over and insert our data
-		zSetInt(localDataArray, slot, zGetInt(localDataArray, slot) * xGetInt(dLocalData, xLocalDataSize) + currentdata);
+		zSetInt(SavedDataArray, slot, zGetInt(SavedDataArray, slot) * xGetInt(dLocalData, xLocalDataSize) + currentdata);
 	}
 	// save all the data into the slots
 	for(i=0; < 16) {
-		trSetCurrentScenarioUserData(i, zGetInt(localDataArray, i));
+		trSetCurrentScenarioUserData(i, zGetInt(SavedDataArray, i));
 	}
 }
 
@@ -92,55 +105,61 @@ void loadRawData() {
 	xsSetContextPlayer(0);
 	for(i=0; < 16) {
 		// load all the raw data into the array
-		zSetInt(localDataArray, i, trGetScenarioUserData(i));
-		if (zGetInt(localDataArray, i) == -1) {
-			zSetInt(localDataArray, i, 0);
+		zSetInt(SavedDataArray, i, trGetScenarioUserData(i));
+		if (zGetInt(SavedDataArray, i) == -1) {
+			zSetInt(SavedDataArray, i, 0);
 		}
+	}
+
+	// Load local data here
+	int slot = 0;
+	int currentdata = 0;
+	int val = 0;
+	xSetPointer(dLocalData, 1);
+	for(i=xGetDatabaseCount(dLocalData); >0) {
+		slot = xGetInt(dLocalData, xLocalDataSlot);
+		currentdata = zGetInt(SavedDataArray, slot); 
+		val = iModulo(xGetInt(dLocalData, xLocalDataSize), currentdata);
+		zSetInt(SavedDataArray, slot, currentdata / xGetInt(dLocalData, xLocalDataSize));
+
+		trQuestVarSet(xGetString(dLocalData, xLocalDataName), val);
+		xDatabaseNext(dLocalData);
 	}
 }
 
 void loadDataFromArray(int arrNum = 0, int p = 1) {
-	int slot = xGetInt(dLocalData, xLocalDataSlot);
+	int slot = xGetInt(dSavedData, xSavedDataSlot);
 	int currentdata = zGetInt(arrNum, slot); 
-	int val = iModulo(xGetInt(dLocalData, xLocalDataSize), currentdata);
-	zSetInt(arrNum, slot, currentdata / xGetInt(dLocalData, xLocalDataSize));
-
-	if (xGetInt(dLocalData, xLocalDataDB) == 0) {
-		// if it's a qv
-		if (trCurrentPlayer() == p) {
-			trQuestVarSet(xGetString(dLocalData, xLocalDataName), val);
-		}
-	} else {
-		// if it's a db entry
-		xSetInt(xGetInt(dLocalData, xLocalDataDB), xGetInt(dLocalData, xLocalDataVar), val, p);
-	}
+	int val = iModulo(xGetInt(dSavedData, xSavedDataSize), currentdata);
+	zSetInt(arrNum, slot, currentdata / xGetInt(dSavedData, xSavedDataSize));
+	xSetInt(xGetInt(dSavedData, xSavedDataDB), xGetInt(dSavedData, xSavedDataVar), val, p);
 }
 
-// Reads data into the local array
+// Reads data into the Saved array
 void loadAllDataMultiplayer() {
 	xsSetContextPlayer(0);
 
-	xSetPointer(dLocalData, 1);
+	xSetPointer(dSavedData, 1);
 	// turn all the data into vars by traversing forwards
-	for(i=xGetDatabaseCount(dLocalData); >0) {
+	for(i=xGetDatabaseCount(dSavedData); >0) {
 		// read the data segment
 		for(p=1; < cNumberPlayers) {
 			loadDataFromArray(zGetInt(playerDataArray, p), p);
 		}
-		xDatabaseNext(dLocalData);
+		xDatabaseNext(dSavedData);
 	}
 }
 
-// Reads data into the local array
+// Reads data into the Saved array
 void loadAllDataSingleplayer() {
 	xsSetContextPlayer(0);
 
-	xSetPointer(dLocalData, 1);
+	xSetPointer(dSavedData, 1);
 	// turn all the data into vars by traversing forwards
-	for(i=xGetDatabaseCount(dLocalData); >0) {
+	for(i=xGetDatabaseCount(dSavedData); >0) {
 		// read the data segment
-		loadDataFromArray(localDataArray);
-		xDatabaseNext(dLocalData);
+		loadDataFromArray(SavedDataArray);
+		xDatabaseNext(dSavedData);
 	}
 }
 
@@ -150,24 +169,28 @@ active
 highFrequency
 {
 	xsDisableSelf();
-	xsEnableRule("setup_local_data");
+	xsEnableRule("setup_data");
 	trDelayedRuleActivation("data_load_01");
 
 	trLetterBox(true);
 	trUIFadeToColor(0,0,0,0,0,true);
 
 	/*
-	The dLocalData database contains every requested piece of data. This is how
+	The dSavedData database contains every requested piece of data. This is how
 	the data will be automatically loaded for us.
 	*/
-	dLocalData = xInitDatabase("localDataSegments");
+	dSavedData = xInitDatabase("SavedDataSegments");
+	xSavedDataSize = xInitAddInt(dSavedData, "size");
+	xSavedDataSlot = xInitAddInt(dSavedData, "slot");
+	xSavedDataDB = xInitAddInt(dSavedData, "database");
+	xSavedDataVar = xInitAddInt(dSavedData, "variable");
+
+	dLocalData = xInitDatabase("LocalDataSegments");
 	xLocalDataSize = xInitAddInt(dLocalData, "size");
 	xLocalDataSlot = xInitAddInt(dLocalData, "slot");
 	xLocalDataName = xInitAddString(dLocalData, "name");
-	xLocalDataDB = xInitAddInt(dLocalData, "database");
-	xLocalDataVar = xInitAddInt(dLocalData, "variable");
 
-	localDataArray = zNewArray(mInt, 16, "localData"); // data for the local player
+	SavedDataArray = zNewArray(mInt, 16, "SavedData"); // data for the Saved player
 
 	if (aiIsMultiplayer()) {
 		playerDataArray = zNewArray(mInt, cNumberPlayers, "playerData"); // a 3-dimensional array holding player data
@@ -253,8 +276,8 @@ highFrequency
 	for(i=currentSwordsmanSlot; < 16) {
 		if (zGetInt(swordsmanCountArray, i) > 0) {
 			zSetInt(swordsmanCountArray, i, zGetInt(swordsmanCountArray, i) - 1);
-			currentSwordsmanData = iModulo(32, zGetInt(localDataArray, i));
-			zSetInt(localDataArray, i, zGetInt(localDataArray, i) / 32);
+			currentSwordsmanData = iModulo(32, zGetInt(SavedDataArray, i));
+			zSetInt(SavedDataArray, i, zGetInt(SavedDataArray, i) / 32);
 
 			currentSwordsmanSlot = i;
 			break;

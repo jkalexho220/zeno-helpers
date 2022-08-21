@@ -20,18 +20,6 @@ Be wary of this side effect. You can modify it back to what you want later.
 There are two functions you can use to add data:
 
 ////////////////////
-// addSavedDataQV //
-////////////////////
-Use this when you want to save the data in a quest var.
-NOTE: This quest var value will be LOCAL to the player, meaning it may have a
-different value for each player.
-
-addSavedDataQV(<QV name>, <slot number>, <data range>);
-
-Example: addSavedDataQV("cow", 0, 10);
-This will tell the game to keep track of the QV "cow". Its value is limited to the range 0-9 and it is stored in slot 0.
-
-////////////////////
 // addSavedDataDB //
 ////////////////////
 Use this when you want to save the data in a database containing player info. This data
@@ -48,9 +36,28 @@ addSavedDataDB(<DB name>, <Var name>, <slot number>, <data range>);
 Example: addSavedDataDB(dPlayerData, xPlayerHealth, 3, 10);
 This will tell the game to keep track of the xPlayerHealth value for each player in the dPlayerData database. 
 Its value ranges from 0-9 and it is stored in slot 3.
+
+////////////////////
+// addLocalDataQV //
+////////////////////
+Use this when you want to save the data in a quest var but LOCAL. This is important because
+this data is NOT transferred to other players whatsoever, and is completely local to the player.
+
+addLocalDataQV(<QV name>, <slot number>, <data range>);
+
+Example: addLocalDataQV("cow", 0, 10);
+This will tell the game to keep track of the QV "cow". Its value is limited to the range 0-9 and it is stored in slot 0.
+
+
+
+///////////////
+// IMPORTANT //
+///////////////
+DO NOT MIX LOCAL AND SAVE DATA! This is very important! Each slot must contain either local data or data that is transferred
+to other players, but never both!
 */
 
-rule setup_local_data
+rule setup_data
 inactive
 highFrequency
 {
@@ -68,7 +75,7 @@ highFrequency
 	Slot 0
 	Total size: 0
 	*/
-	addSavedDataQV("example", 0, 13); // the QV "example" can have an integer value from 0-12. It is stored in the first slot
+	addLocalDataQV("example", 0, 1000); // the QV "example" can have an integer value from 0-999. It is stored in the first slot
 
 	/*
 	Slot 1

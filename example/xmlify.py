@@ -11,9 +11,9 @@ import sys
 ###############################
 ####### CUSTOMIZE THESE #######
 ###############################
-FILENAME = 'myFile.xml'
-NAME = 'My Code'
-files = ['shared.c']
+FILENAME = 'zHelperFunctions.xml'
+NAME = ' Z Helper Functions'
+files = ['Zshared.c', 'test.c']
 
 #########################################
 ####### CODE BELOW (DO NOT TOUCH) #######

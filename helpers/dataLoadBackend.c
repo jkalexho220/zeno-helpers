@@ -93,6 +93,9 @@ void loadRawData() {
 	for(i=0; < 16) {
 		// load all the raw data into the array
 		zSetInt(localDataArray, i, trGetScenarioUserData(i));
+		if (zGetInt(localDataArray, i) == -1) {
+			zSetInt(localDataArray, i, 0);
+		}
 	}
 }
 

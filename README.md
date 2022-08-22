@@ -102,3 +102,15 @@ But where did this number 2 come from? Most of the time, we won't be working wit
 This is the secret sauce behind Ascension, made in an incredibly easy to use format for anyone. To start, please include the **zshared.c, dataLoadBackend.c,** and **dataLoadModifyMe.c** files in your rmsify.py file list. These three files don't have to be directly contiguous, but make sure they are in this sequential order (You can include other files of your own in between them, as long as zshared.c is before dataLoadBackend.c and dataLoadBackend.c is before dataLoadModifyMe.c).
 
 Next, open **dataLoadModifyMe.c** and follow instructions in the comments to add your desired data.
+
+With this, the game will load the data at the start of the map. In multiplayer, it will go through the whole loading bar. In singleplayer, the data load is instantaneous.
+
+### Saving
+To save your data, simply call the **saveAllData()** function, which will save all the values back into the player's profile. This can be called at any time during play, even if the game is still running, although I would recommend only saving at sparse checkpoints or the end of the map.
+
+### Data Types
+All the data is stored as integers. Floats and other such things will not work. There is also a distinction between the data:
+* **Database Data**: This is data that is unique for each player. For example, each player has their own level in Ascension. This is data that is loaded at the start of the map and communicated to other player machines.
+* **Local Data**: This is data that isn't important for multiplayer. For example, only in singleplayer does the map care about your collection of relics, or what levels your unused classes are at. Therefore, this data is NOT transferred to other players when playing the map in multiplayer.
+
+It is VERY IMPORTANT to make sure that Local Data and Database Data are in separate slots. If you have a bit of both in the same slot, it will BREAK your data.

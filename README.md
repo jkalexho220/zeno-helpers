@@ -45,9 +45,9 @@ You have just defined your database. However, there's nothing in it! To add some
 
 This will also return an integer which represents the index of the block you just added.
 ```
-    xAddDatabaseBlock(dPlayerData);
+    xAddDatabaseBlock(dPlayerUnits);
 ```
-If we run the above command, it will create a new block in the dPlayerData database. It will have its own xUnitName integer, xUnitArmor float, xUnitProto string, xUnitPos vector, and xUnitActive bool.
+If we run the above command, it will create a new block in the dPlayerUnits database. It will have its own xUnitName integer, xUnitArmor float, xUnitProto string, xUnitPos vector, and xUnitActive bool.
 
 ### Step 3: Get and set variables
 Now that you have a block in your database, you can manipulate its contents however you wish, with Get and Set functions. For example:
@@ -88,7 +88,7 @@ If you want to look at a specific block in the database, you can do so with **xS
 * **Database ID**: The unique ID of the database to run this function on.
 * **Index**: The index to set the pointer to.
 
-This will make the database look at the block at index <index>, if it is currently in the database. If the block at that index is not currently in the database, this function will return false. You can think of this like **trUnitSelect()** but for database blocks instead of units. For example:
+This will make the database look at the block at the specified index, if it is currently in the database. If the block at that index is not currently in the database, this function will return false. You can think of this like **trUnitSelect()** but for database blocks instead of units. For example:
 ```
     if (xSetPointer(dPlayerUnits, 2)) {
       xSetFloat(dPlayerUnits, xUnitArmor, 0.99);

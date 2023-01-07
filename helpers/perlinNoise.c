@@ -56,7 +56,7 @@ vector perlinNormalVector(int meta = 0, vector pos = vector(0,0,0), float radius
 	float perlinNorth = getPerlinNoise(meta, xsVectorGetX(pos) + radius, xsVectorGetZ(pos) + radius);
 	float perlinEast = getPerlinNoise(meta, xsVectorGetX(pos) + radius, xsVectorGetZ(pos) - radius);
 	float perlinSouth = getPerlinNoise(meta, xsVectorGetX(pos) - radius, xsVectorGetZ(pos) - radius);
-	float perlinWest = getPerlinNoise(meta, xsVectorGetX(pos) - radius, xsVectorGetZ(pos) - radius);
+	float perlinWest = getPerlinNoise(meta, xsVectorGetX(pos) - radius, xsVectorGetZ(pos) + radius);
 	return(xsVectorNormalize(xsVectorSet(perlinNorth - perlinWest + perlinEast - perlinSouth, 0, perlinNorth - perlinEast + perlinWest - perlinSouth)));
 }
 

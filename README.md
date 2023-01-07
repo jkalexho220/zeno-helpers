@@ -114,3 +114,6 @@ All the data is stored as integers. Floats and other such things will not work. 
 * **Local Data**: This is data that isn't important for multiplayer. For example, only in singleplayer does the map care about your collection of relics, or what levels your unused classes are at. Therefore, this data is NOT transferred to other players when playing the map in multiplayer.
 
 It is VERY IMPORTANT to make sure that Local Data and Database Data are in separate slots. If you have a bit of both in the same slot, it will BREAK your data.
+
+## Perlin Noise
+Perlin noise is used to generate random terrain. These are helper functions to help you generate perlin noise terrain.

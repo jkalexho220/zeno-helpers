@@ -52,6 +52,14 @@ bool coordinatesInPerlin(int meta = 0, int x = 0, int y = 0, int padding = 0) {
 	return(x >= padding && y >= padding && x <= size - padding && y <= size - padding);
 }
 
+vector perlinNormalVector(int meta = 0, vector pos = vector(0,0,0), float radius = 1.0) {
+	float perlinNorth = getPerlinNoise(meta, xsVectorGetX(pos) + radius, xsVectorGetZ(pos) + radius);
+	float perlinEast = getPerlinNoise(meta, xsVectorGetX(pos) + radius, xsVectorGetZ(pos) - radius);
+	float perlinSouth = getPerlinNoise(meta, xsVectorGetX(pos) - radius, xsVectorGetZ(pos) - radius);
+	float perlinWest = getPerlinNoise(meta, xsVectorGetX(pos) - radius, xsVectorGetZ(pos) - radius);
+	return(xsVectorNormalize(xsVectorSet(perlinNorth - perlinWest + perlinEast - perlinSouth, 0, perlinNorth - perlinEast + perlinWest - perlinSouth)));
+}
+
 /*
 As though we were rolling a marble down a hill until it reaches below a certain height in the perlin noise.
 

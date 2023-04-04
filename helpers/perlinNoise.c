@@ -1,3 +1,19 @@
+/*
+EXAMPLE
+
+int myPerlin = generatePerlinNoise(mapSize, 5);
+float height = 0;
+
+for(x=0; <= mapSize) {
+	for(y=0; <= mapSize) {
+		height = getPerlinNoise(myPerlin, x, y) * 2.0; // you may need to tweak this modifier
+		trChangeTerrainHeight(x, y, x, y, height, false);
+	}
+}
+
+
+*/
+
 float interpolatePerlin(float start = 0, float end = 1, float percentage = 0) {
 	// return (a1 - a0) * (3.0 - w * 2.0) * w * w + a0;
 	return((end - start) * (3.0 - percentage * 2.0) * xsPow(percentage, 2) + start);
@@ -7,6 +23,9 @@ float interpolatePerlin(float start = 0, float end = 1, float percentage = 0) {
 /*
 Generate Perlin Noise graph and return an integer index of the graph. Use this integer
 as input for the other PerlinNoise functions
+size = number of tiles in one dimension of the graph. This always generates a square graph of size x size
+granularity = how far apart the vectors are
+This function generates this: https://upload.wikimedia.org/wikipedia/commons/0/09/PerlinNoiseGradientGrid.png
 */
 int generatePerlinNoise(int size = 50, int granularity = 5) {
 	int db = aiPlanCreate("perlinNoise", 8);
@@ -26,6 +45,11 @@ int generatePerlinNoise(int size = 50, int granularity = 5) {
 	return(meta);
 }
 
+/*
+Given a perlin noise grid meta and coordinates x, y, outputs the value of perlin noise at that location
+
+Calculates the value from this graph: https://upload.wikimedia.org/wikipedia/commons/7/79/PerlinNoiseInterpolated.png
+*/
 float getPerlinNoise(int meta = 0, float x = 0, float y = 0) {
 	int db = zGetInt(meta, 0);
 	int granularity = zGetInt(meta, 1);
@@ -47,11 +71,17 @@ float getPerlinNoise(int meta = 0, float x = 0, float y = 0) {
 	return(total);
 }
 
+/*
+Returns true if the coordinates are within your perlin noise graph
+*/
 bool coordinatesInPerlin(int meta = 0, int x = 0, int y = 0, int padding = 0) {
 	int size = zGetInt(meta, 3);
 	return(x >= padding && y >= padding && x <= size - padding && y <= size - padding);
 }
 
+/*
+Returns a vector revealing the slope of the terrain at this perlin noise graph position
+*/
 vector perlinNormalVector(int meta = 0, vector pos = vector(0,0,0), float radius = 1.0) {
 	float perlinNorth = getPerlinNoise(meta, xsVectorGetX(pos) + radius, xsVectorGetZ(pos) + radius);
 	float perlinEast = getPerlinNoise(meta, xsVectorGetX(pos) + radius, xsVectorGetZ(pos) - radius);

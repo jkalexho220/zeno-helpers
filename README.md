@@ -3,6 +3,7 @@ A suite of high-level helper functions for Age of Mythology custom mapmaking. Al
 * **zshared.c**: This file contains a ton of useful helper functions for AoM mapmaking. Recommended for any advanced Random Map Scripting. Make sure this is the first file parsed by your rmsify.py or xmlify.py.
 * **dataLoadBackend.c**: This file contains necessary code for running data loading. Only include if you plan to use the dataLoad feature. NOTE: If you want to use this feature for Multiplayer, it only works for Random Map Scripts! Scenarios cannot do multiplayer data load! (But they can still do singleplayer data load)
 * **dataLoadModifyMe.c**: This file contains information that should be modified by the user if they intend to use the dataLoad feature.
+* **perlinNoise.c**: This file contains basic functions for generating Perlin Noise. Documentation and use cases are found in a comment in the file.
 
 ## xDatabase Functions
 These functions are powerful database functions that allow you to group, store, and iterate over data in an incredibly fluid manner. It utilizes a Linked List implementation to carry chunks of data, which are defined to have certain values. (If you know c programming, imagine this as a linked list of structs).
